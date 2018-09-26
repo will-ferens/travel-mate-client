@@ -7,26 +7,27 @@ import gql from 'graphql-tag'
 import { history } from '../helpers/history'
 import { AUTH_TOKEN } from '../constants/user_const'
 
-const SIGNIN_MUTATION = gql`
-    mutation LoginMutation($email: String!, $password: String!) {
-        login( email: $email password: $password) {
+const SIGNUP_MUTATION = gql`
+    mutation SignupMutation($email: String!, $username: String!, $password: String!) {
+        signup( email: $email username: $username password: $password) {
             token
         }
     }
 `
 
-class SignIn extends Component {
+class SignUp extends Component {
     constructor(props) {
         super(props)
         
         this.state = {
             email: '',
+            username: '',
             password: ''
         }
         
         this.onEmailChange = this.onEmailChange.bind(this)
         this.onPasswordChange = this.onPasswordChange.bind(this)
-
+        this.onUsernameChange = this.onUsernameChange.bind(this)
 
     }
 
@@ -38,16 +39,18 @@ class SignIn extends Component {
         this.setState({ password: event.target.value })
     }
 
-    
+    onUsernameChange(event){
+        this.setState({ username: event.target.value })
+    }
 
     render() {
-        const { email, password } = this.state
+        const { email, username, password } = this.state
 
         return (
             <section>
                 <div>
                     <div>
-                        <h2>Sign in</h2>
+                        <h2>Sign up</h2>
                     </div>
                     <form>
                         <label>Email</label>
@@ -56,6 +59,12 @@ class SignIn extends Component {
                             onChange={this.onEmailChange}
                             placeholder="Email"
                             />
+                        <label>Username</label>
+                        <input
+                            value={username}
+                            onChange={this.onUsernameChange}
+                            placeholder="Username"
+                            />
                         <label>Password</label>
                         <input 
                             value={password}
@@ -63,15 +72,15 @@ class SignIn extends Component {
                             placeholder="Password"
                         />
                         <Mutation
-                            mutation={SIGNIN_MUTATION}
-                            variables={{ email, password }}
+                            mutation={SIGNUP_MUTATION}
+                            variables={{ email, username, password }}
                             onCompleted={data => this._confirm(data)}
                         >
                             {mutation => (
                                 <button onClick={mutation}>Submit</button>
                             )}
                         </Mutation>
-                        <Link to="/signup"><button>Or sign up</button></Link>
+                        <Link to="/signin"><button>Or sign in</button></Link>
                     </form>
                 </div>
             </section>
@@ -81,7 +90,7 @@ class SignIn extends Component {
     _confirm = async data => {
         const { token } = data.login
         this._saveUserData(token)
-        history.push(`/`)
+        history.push('/')
     }
 
     _saveUserData = token => {
@@ -89,4 +98,4 @@ class SignIn extends Component {
     }
 }
 
-export default SignIn
+export default SignUp

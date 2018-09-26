@@ -5,6 +5,7 @@ import { history } from '../helpers/history'
 
 import HomePage from '../components/home'
 import SignIn from './sign_in'
+import SignUp from './sign_up'
 
 
 class App extends Component {
@@ -15,6 +16,7 @@ class App extends Component {
                     <Switch>
                         <Route exact path="/" component={HomePage} />
                         <Route exact path="/signin" component={SignIn} />
+                        <Route exact path="/signup" component={SignUp} />
                     </Switch>
                 </Router>
             </div>
